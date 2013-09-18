@@ -44,7 +44,16 @@ class Game
   end
 
   def check_diagonals(player)
+    diagonals = create_diagonals
+    count_how_many_player_entries_are(player, diagonals)  
+  end
 
+  def create_diagonals  
+    diagonals = Array.new
+    diag_l_to_r = create_diagonal_left_to_right
+    diag_r_to_l = create_diagonal_right_to_left
+    diagonals.push(diag_l_to_r, diag_r_to_l)
+    diagonals
   end
 
   def count_how_many_player_entries_are(player, array)
@@ -54,12 +63,42 @@ class Game
   def get_columns
    columns = Array.new
    for i in 0..2
-     columns.push([@table[0][i],@table[1][i],@table[2][i]])
+     col = create_column(@table[0][i], @table[1][i], @table[2][i])
+     columns.push(col)
    end
+   columns 
+  end
+
+  def create_column(e_row1, e_row2, e_row3)
+	col = Array.new
+	col.push(e_row1)
+	col.push(e_row2)
+	col.push(e_row3)
+	col
+  end
+
+  def create_diagonal_left_to_right
+     diagonal = Array.new
+     diagonal.push(@table[0][0])
+     diagonal.push(@table[1][1])
+     diagonal.push(@table[2][2])
+     diagonal
+  end
+
+  def create_diagonal_right_to_left
+     diagonal = Array.new
+     diagonal.push(@table[0][2])
+     diagonal.push(@table[1][1])
+     diagonal.push(@table[2][0])
+     diagonal
   end
   
   def is_a_winner?(data)
-    data.member?(3)
+    if(data.member?(3))
+      true
+    else
+      false
+    end
   end
   
   ## INPUT ##
@@ -86,6 +125,8 @@ class Game
      y = get_axis_from_keyboard("y")
      insert_position_on_table(x,y,player)
      if(check_if_there_is_a_winner(player))
+        show_table
+	"Congratulations player #{player} you win!!"
         break
      end
      if(player == 1)
