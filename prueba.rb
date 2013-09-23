@@ -108,19 +108,33 @@ class Game
   
   ## INPUT ##
   
- def insert_position_on_table(x,y)
-    row = @table.slice(x)
-    if(row[y] == 0)
-      row[y] =  @player
-    else
-      print "ERROR"
-    end
+  def insert_position_on_table(x,y)
+    @table[x][y] = @player 
   end
 
   def get_axis_from_keyboard(axis)
      print "Please enter the #{axis} position: "
      axle = gets
      axle.to_i
+  end
+
+  def ask_for_position
+    position = Array.new
+    while(true)      
+      x = get_axis_from_keyboard("x")
+      y = get_axis_from_keyboard("y")
+      if(!is_used?(x,y))
+        position.push(x)
+        position.push(y)
+        break
+      end
+      print "Casilla ocupada. Ingrese otra por favor\n"
+    end
+    position
+  end
+
+  def is_used?(x,y)
+     @table[x][y] != 0
   end
 
 
@@ -130,9 +144,8 @@ class Game
    while(true)
      self.show_table
      print "Player #{@player} is your turn\n"
-     x = get_axis_from_keyboard("x")
-     y = get_axis_from_keyboard("y")
-     insert_position_on_table(x,y)
+     position = ask_for_position
+     insert_position_on_table(position[0],position[1])
      if(check_if_there_is_a_winner)
         show_table
 	print "Congratulations player #{@player} you win!!\n"
