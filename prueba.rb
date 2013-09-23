@@ -1,9 +1,10 @@
 class Game
-  attr_accessor :table
+  attr_accessor :table, :player
   
   def initialize()
    @table =  Array.new
    create_rows_on_table
+   @player = 1
   end
 
   ##TABLE SECTION ##
@@ -21,31 +22,31 @@ class Game
 
 
   ##CHECK SECTION##
-  def check_if_there_is_a_winner(player)
-     if(check_rows(player))
+  def check_if_there_is_a_winner
+     if(check_rows)
        true
-     elsif(check_columns(player))
+     elsif(check_columns)
        true
-     elsif(check_diagonals(player))
+     elsif(check_diagonals)
        true
      else
        false
      end
   end
 
-  def check_rows(player)
-   result =  @table.map{|row| count_how_many_player_entries_are(player,row)}
+  def check_rows
+   result =  @table.map{|row| count_how_many_player_entries_are(row)}
    is_a_winner?(result)
   end
 
-  def check_columns(player)
-    result = get_columns.map{ |col| count_how_many_player_entries_are(player,col)}
+  def check_columns
+    result = get_columns.map{ |col| count_how_many_player_entries_are(col)}
     is_a_winner?(result)
   end
 
-  def check_diagonals(player)
+  def check_diagonals
     diagonals = create_diagonals
-    result = diagonals.map{ |col| count_how_many_player_entries_are(player, col)}
+    result = diagonals.map{ |col| count_how_many_player_entries_are(col)}
     is_a_winner?(result)
   end
 
@@ -58,8 +59,8 @@ class Game
     diagonals 
   end
 
-  def count_how_many_player_entries_are(player, array)
-    array.select{|entry| entry == player}.count
+  def count_how_many_player_entries_are(array)
+    array.select{|entry| entry == @player}.count
   end
 
   def get_columns
@@ -107,10 +108,10 @@ class Game
   
   ## INPUT ##
   
- def insert_position_on_table(x,y,player)
+ def insert_position_on_table(x,y)
     row = @table.slice(x)
     if(row[y] == 0)
-      row[y] =  player
+      row[y] =  @player
     else
       print "ERROR"
     end
@@ -128,24 +129,26 @@ class Game
    player = 1
    while(true)
      self.show_table
-     print "Player #{player} is your turn\n"
+     print "Player #{@player} is your turn\n"
      x = get_axis_from_keyboard("x")
      y = get_axis_from_keyboard("y")
-     insert_position_on_table(x,y,player)
-     if(check_if_there_is_a_winner(player))
+     insert_position_on_table(x,y)
+     if(check_if_there_is_a_winner)
         show_table
-	"Congratulations player #{player} you win!!"
+	print "Congratulations player #{@player} you win!!\n"
         break
      end
-     if(player == 1)
-       player = 2
-     else
-       player = 1
-     end
+     switch_player_active
    end
  end
- 
 
+def switch_player_active 
+     if(@player == 1)
+       @player = 2
+     else
+       @player = 1
+     end
+end
 Juego = Game.new
 Juego.playing_role
    
