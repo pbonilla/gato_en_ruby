@@ -26,8 +26,8 @@ class Game
        true
      elsif(check_columns(player))
        true
-     #elsif(check_diagonals)
-     ##  true
+     elsif(check_diagonals(player))
+       true
      else
        false
      end
@@ -45,15 +45,17 @@ class Game
 
   def check_diagonals(player)
     diagonals = create_diagonals
-    count_how_many_player_entries_are(player, diagonals)  
+    result = diagonals.map{ |col| count_how_many_player_entries_are(player, col)}
+    is_a_winner?(result)
   end
 
   def create_diagonals  
     diagonals = Array.new
     diag_l_to_r = create_diagonal_left_to_right
     diag_r_to_l = create_diagonal_right_to_left
-    diagonals.push(diag_l_to_r, diag_r_to_l)
-    diagonals
+    diagonals.push(diag_l_to_r)
+    diagonals.push(diag_r_to_l)
+    diagonals 
   end
 
   def count_how_many_player_entries_are(player, array)
@@ -82,6 +84,7 @@ class Game
      diagonal.push(@table[0][0])
      diagonal.push(@table[1][1])
      diagonal.push(@table[2][2])
+     diagonal.join(" ")
      diagonal
   end
 
@@ -90,6 +93,7 @@ class Game
      diagonal.push(@table[0][2])
      diagonal.push(@table[1][1])
      diagonal.push(@table[2][0])
+     diagonal.join(" ")
      diagonal
   end
   
@@ -105,7 +109,11 @@ class Game
   
  def insert_position_on_table(x,y,player)
     row = @table.slice(x)
-    row[y] = player
+    if(row[y] == 0)
+      row[y] =  player
+    else
+      print "ERROR"
+    end
   end
 
   def get_axis_from_keyboard(axis)
