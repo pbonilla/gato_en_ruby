@@ -22,16 +22,8 @@ class Game
 
 
   ##CHECK SECTION##
-  def check_if_there_is_a_winner
-     if(check_rows)
-       true
-     elsif(check_columns)
-       true
-     elsif(check_diagonals)
-       true
-     else
-       false
-     end
+  def if_there_is_a_winner?
+     return check_rows || check_columns || check_diagonals
   end
 
   def check_rows
@@ -40,7 +32,7 @@ class Game
   end
 
   def check_columns
-    result = get_columns.map{ |col| count_how_many_player_entries_are(col)}
+    result = columns.map{ |col| count_how_many_player_entries_are(col)}
     is_a_winner?(result)
   end
 
@@ -63,7 +55,7 @@ class Game
     array.select{|entry| entry == @player}.count
   end
 
-  def get_columns
+  def columns
    columns = Array.new
    for i in 0..2
      col = create_column(@table[0][i], @table[1][i], @table[2][i])
@@ -85,7 +77,6 @@ class Game
      diagonal.push(@table[0][0])
      diagonal.push(@table[1][1])
      diagonal.push(@table[2][2])
-     diagonal.join(" ")
      diagonal
   end
 
@@ -94,16 +85,11 @@ class Game
      diagonal.push(@table[0][2])
      diagonal.push(@table[1][1])
      diagonal.push(@table[2][0])
-     diagonal.join(" ")
      diagonal
   end
   
-  def is_a_winner?(data)
-    if(data.member?(3))
-      true
-    else
-      false
-    end
+  def is_a_winner?(array_with_checked_entries)
+    array_with_checked_entries.member?(3)
   end
   
   ## INPUT ##
@@ -112,7 +98,7 @@ class Game
     @table[x][y] = @player 
   end
 
-  def get_axis_from_keyboard(axis)
+  def axis_from_keyboard(axis)
      print "Please enter the #{axis} position: "
      axle = gets
      axle.to_i
@@ -128,7 +114,7 @@ class Game
         position.push(y)
         break
       end
-      print "Casilla ocupada. Ingrese otra por favor\n"
+      print "Entry occupied. Could you please enter another?\n"
     end
     position
   end
@@ -146,7 +132,7 @@ class Game
      print "Player #{@player} is your turn\n"
      position = ask_for_position
      insert_position_on_table(position[0],position[1])
-     if(check_if_there_is_a_winner)
+     if(if_there_is_a_winner?)
         show_table
 	print "Congratulations player #{@player} you win!!\n"
         break
