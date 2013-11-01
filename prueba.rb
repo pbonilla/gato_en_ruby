@@ -1,22 +1,21 @@
 class Game
-  attr_accessor :table, :player
+  attr_accessor :board, :player
   
   def initialize()
-   @table =  Array.new
+   @board =  Array.new
    create_rows_on_table
    @player = 1
   end
 
-  ##TABLE SECTION ##
-  def create_rows_on_table
+  def create_rows_on_board
     3.times do
-      @table.push([0,0,0])
+      @board.push([0,0,0])
     end
   end
   
   def show_table
    puts "----------"
-   @table.each { |row| puts row.join(" ") }
+   @board.each { |row| puts row.join(" ") }
    puts "----------"
   end
 
@@ -27,7 +26,7 @@ class Game
   end
 
   def check_rows
-   result =  @table.map{|row| count_how_many_player_entries_are(row)}
+   result =  @board.map{|row| count_how_many_player_entries_are(row)}
    is_a_winner?(result)
   end
 
@@ -53,34 +52,22 @@ class Game
   def columns
    columns = Array.new
    for i in 0..2
-     col = create_column(@table[0][i], @table[1][i], @table[2][i])
+     col = create_column(@board[0][i], @board[1][i], @board[2][i])
      columns.push(col)
    end
    columns 
   end
 
   def create_column(e_row1, e_row2, e_row3)
-	col = Array.new
-	col.push(e_row1)
-	col.push(e_row2)
-	col.push(e_row3)
-	col
+	column = [e_row1,e_row2,e_row3]
   end
 
   def create_diagonal_left_to_right
-     diagonal = Array.new
-     diagonal.push(@table[0][0])
-     diagonal.push(@table[1][1])
-     diagonal.push(@table[2][2])
-     diagonal
+     diagonal = [@board[0][0], @board[1][1], @board[2][2]]
   end
 
   def create_diagonal_right_to_left
-     diagonal = Array.new
-     diagonal.push(@table[0][2])
-     diagonal.push(@table[1][1])
-     diagonal.push(@table[2][0])
-     diagonal
+     diagonal = [@board[0][2], @board[1][1],@board[2][0]]
   end
   
   def is_a_winner?(array_with_checked_entries)
@@ -90,7 +77,7 @@ class Game
   ## INPUT ##
   
   def insert_position_on_table(x,y)
-    @table[x][y] = @player 
+    @board[x][y] = @player 
   end
 
   def axis_from_keyboard(axis)
@@ -115,7 +102,7 @@ class Game
   end
 
   def is_used?(x,y)
-     @table[x][y] != 0
+     @board[x][y] != 0
   end
 
 
