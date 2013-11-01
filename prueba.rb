@@ -43,12 +43,7 @@ class Game
   end
 
   def create_diagonals  
-    diagonals = Array.new
-    diag_l_to_r = create_diagonal_left_to_right
-    diag_r_to_l = create_diagonal_right_to_left
-    diagonals.push(diag_l_to_r)
-    diagonals.push(diag_r_to_l)
-    diagonals 
+    diagonals = [create_diagonal_left_to_right,create_diagonal_right_to_left]
   end
 
   def count_how_many_player_entries_are(array)
@@ -107,8 +102,8 @@ class Game
   def ask_for_position
     position = Array.new
     while(true)      
-      x = get_axis_from_keyboard("x")
-      y = get_axis_from_keyboard("y")
+      x = axis_from_keyboard("x")
+      y = axis_from_keyboard("y")
       if(!is_used?(x,y))
         position.push(x)
         position.push(y)
